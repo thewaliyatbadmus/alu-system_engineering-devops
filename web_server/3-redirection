@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Configures Nginx to redirect /redirect_me to another page (301)
+
+set -e
+
+# 1. Install nginx
+apt-get update -y
+DEBIAN_FRONTEND=noninteractive apt-get install -y nginx
+
+# 2. Create the redirection in the default site config
+# We'll replace the default server block using sed
+NGINX_DEFAULT="/etc/nginx/sites-available/default"
+
+# Use sed to insert the redirect inside the server block
+# Only if it doesn’t already exist, to keep the script idempotent
+if ! grep -q "location /redirect_me" "$NGINX_DEFAULT"; then
+    sed -i '/server_name _;/a \
+    location /redirect_me {\n\
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\
+    }' "$NGINX_DEFAULT"
+fi
+
+# 3. Restart nginx using service (not systemctl)
+service nginx restart
+
