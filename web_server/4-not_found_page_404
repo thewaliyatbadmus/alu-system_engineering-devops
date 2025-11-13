@@ -12,12 +12,12 @@ echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
 
 # Overwrite Nginx default server block
 echo "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
+    listen [::]:80;
 
-    server_name _;
+    server_name thewaliyatbadmus.tech www.thewaliyatbadmus.tech;
 
-    root /var/www/html;
+    root /var/www/thewaliyatbadmus.tech/html;
     index index.html;
 
     error_page 404 /custom_404.html;
